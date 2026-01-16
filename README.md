@@ -6,7 +6,7 @@ G1-EDU from RL to Sim-to-real
 * 
 
 ## What I have done
-### Following [Installation using Isaac Sim Pre-built Binaries](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html)
+### Follow [IsaacLab/Installation using Isaac Sim Pre-built Binaries](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html)
 #### Start installing Isaac Sim
 1. Install Isaac Sim (Download pre-built [binaries](https://download.isaacsim.omniverse.nvidia.com/isaac-sim-standalone-5.1.0-linux-x86_64.zip) and unzip them into `${HOME}/isaacsim`)
 2. Add the below in `~/.bashrc`
@@ -55,3 +55,13 @@ G1-EDU from RL to Sim-to-real
 # train a robot dog to walk
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-Anymal-C-v0 --headless
 ```
+
+### Follow [Unitree RL Lab/Installation](https://github.com/unitreerobotics/unitree_rl_lab?tab=readme-ov-file#installation)
+#### Install the Unitree RL IsaacLab standalone environments
+1. Clone `unitree_rl_lab` outside the `IsaacLab` directory
+    ```shell
+    cd ~/project/Humanoid
+    git clone https://github.com/unitreerobotics/unitree_rl_lab.git
+    rm -rf unitree_rl_lab/.git
+    ```
+2. 
