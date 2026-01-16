@@ -4,7 +4,7 @@ G1-EDU from RL to Sim-to-real
 
 ## What I have done
 ### Following [Installation using Isaac Sim Pre-built Binaries](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html)
-1. Install Isaac Sim
+1. Install Isaac Sim (Download pre-built binaries and unzip)
 2. Add these in `~/.bashrc`
     ```
     # Isaac Sim root directory
@@ -16,5 +16,8 @@ G1-EDU from RL to Sim-to-real
     ```
     git clone https://github.com/isaac-sim/IsaacLab.git
     rm -rf IsaacLab/.git
+    cd IsaacLab
+    ln -s ${ISAACSIM_PATH} _isaac_sim
     ```
-
+4. Set python environment
+5. 
