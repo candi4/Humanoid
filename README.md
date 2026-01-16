@@ -6,7 +6,7 @@ G1-EDU from RL to Sim-to-real
 * 
 
 ## What I have done
-### Follow [IsaacLab/Installation using Isaac Sim Pre-built Binaries](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html)
+### Follow [Isaac Lab/Installation using Isaac Sim Pre-built Binaries](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html)
 #### Start installing Isaac Sim
 1. Install Isaac Sim (Download pre-built [binaries](https://download.isaacsim.omniverse.nvidia.com/isaac-sim-standalone-5.1.0-linux-x86_64.zip) and unzip them into `${HOME}/isaacsim`)
 2. Add the below in `~/.bashrc`
@@ -49,12 +49,18 @@ G1-EDU from RL to Sim-to-real
         python scripts/tutorials/00_sim/create_empty.py
         ```
 #### Isaac Lab is installed. Try training a robot
-```shell
-# train an ant to walk
-./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Ant-v0 --headless
-# train a robot dog to walk
-./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-Anymal-C-v0 --headless
-```
+* Train
+    ```shell
+    # train an ant to walk
+    ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Ant-v0 --headless
+    # train a robot dog to walk
+    ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-Anymal-C-v0 --headless
+    ```
+* Play (Refer to [Isaac Lab/Reinforcement Learning Scripts](https://isaac-sim.github.io/IsaacLab/main/source/overview/reinforcement-learning/rl_existing_scripts.html))
+    ```shell
+    # run script for playing with 32 environments
+    ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task Isaac-Velocity-Rough-Anymal-C-v0 --num_envs 32 --load_run logs/rsl_rl/anymal_c_rough/2026-01-16_15-01-34 --checkpoint logs/rsl_rl/anymal_c_rough/2026-01-16_15-01-34/model_1499.pt
+    ```
 
 ### Follow [Unitree RL Lab/Installation](https://github.com/unitreerobotics/unitree_rl_lab?tab=readme-ov-file#installation)
 #### Install the Unitree RL IsaacLab standalone environments
