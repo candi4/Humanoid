@@ -186,3 +186,12 @@ G1-EDU from RL to Sim-to-real
             ```python
             from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
             ```
+        * Troubleshooting
+            ```shell
+            AssertionError: Invalid file path: /home/hojun/project/Humanoid/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/mimic/robots/g1_29dof/gangnanm_style/G1_gangnam_style_V01.bvh_60hz.npz
+            ```
+            Generate `npz` file from `csv` file.
+            ```shell
+            python scripts/mimic/csv_to_npz.py -f source/unitree_rl_lab/unitree_rl_lab/tasks/mimic/robots/g1_29dof/gangnanm_style/G1_gangnam_style_V01.bvh_60hz.csv --input_fps 60
+            ```
+            After one cycle, force quit the simulation.
