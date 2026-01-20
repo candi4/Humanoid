@@ -159,39 +159,45 @@ G1-EDU from RL to Sim-to-real
         ...
         ```
         Every `UnitreeUrdfFileCfg` should be changed
-   * Verify that the environments are correctly installed by:
+#### Unitree RL IsaacLab is installed. Try trainig and playing
+* List the available tasks
+    ```shell
+    ./unitree_rl_lab.sh -l
+    ```
+* Train
+    ```shell
+    ./unitree_rl_lab.sh -t --task Unitree-G1-29dof-Velocity
+    python scripts/rsl_rl/train.py --headless --task Unitree-G1-29dof-Velocity
+    ```
+    * Troubleshooting
         ```shell
-        cd unitree_rl_lab
-        # Listing the available tasks
-        ./unitree_rl_lab.sh -l # This is a faster version than isaaclab
-        # Running a task (Same)
-        ./unitree_rl_lab.sh -t --task Unitree-G1-29dof-Velocity
-        python scripts/rsl_rl/train.py --headless --task Unitree-G1-29dof-Velocity
-        # Inference with a trained agent (Same)
-        ./unitree_rl_lab.sh -p --task Unitree-G1-29dof-Velocity
-        python scripts/rsl_rl/play.py --task Unitree-G1-29dof-Velocity
+        AssertionError: Invalid file path: /home/hojun/project/Humanoid/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/mimic/robots/g1_29dof/gangnanm_style/G1_gangnam_style_V01.bvh_60hz.npz
         ```
-        * Troubleshooting
-            ```shell
-            Traceback (most recent call last):
-              File "/home/hojun/project/Humanoid/unitree_rl_lab/scripts/rsl_rl/play.py", line 59, in <module>
-                from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
-            ModuleNotFoundError: No module named 'isaaclab.utils.pretrained_checkpoint'
-            ```
-            Change line 59 in `unitree_rl_lab/scripts/rsl_rl/play.py` from
-            ```python
+        Generate `npz` file from `csv` file.
+        ```shell
+        python scripts/mimic/csv_to_npz.py -f source/unitree_rl_lab/unitree_rl_lab/tasks/mimic/robots/g1_29dof/gangnanm_style/G1_gangnam_style_V01.bvh_60hz.csv --input_fps 60
+        ```
+        After one cycle, force quit the simulation.
+* Play
+    ```shell
+    ./unitree_rl_lab.sh -p --task Unitree-G1-29dof-Velocity
+    python scripts/rsl_rl/play.py --task Unitree-G1-29dof-Velocity
+    ```
+    * Troubleshooting
+        ```shell
+        Traceback (most recent call last):
+          File "/home/hojun/project/Humanoid/unitree_rl_lab/scripts/rsl_rl/play.py", line 59, in <module>
             from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
-            ```
-            to
-            ```python
-            from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
-            ```
-        * Troubleshooting
-            ```shell
-            AssertionError: Invalid file path: /home/hojun/project/Humanoid/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/mimic/robots/g1_29dof/gangnanm_style/G1_gangnam_style_V01.bvh_60hz.npz
-            ```
-            Generate `npz` file from `csv` file.
-            ```shell
-            python scripts/mimic/csv_to_npz.py -f source/unitree_rl_lab/unitree_rl_lab/tasks/mimic/robots/g1_29dof/gangnanm_style/G1_gangnam_style_V01.bvh_60hz.csv --input_fps 60
-            ```
-            After one cycle, force quit the simulation.
+        ModuleNotFoundError: No module named 'isaaclab.utils.pretrained_checkpoint'
+        ```
+        Change line 59 in `unitree_rl_lab/scripts/rsl_rl/play.py` from
+        ```python
+        from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+        ```
+        to
+        ```python
+        from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+        ```
+
+### Follow [Unitree RL Lab/Deploy](https://github.com/unitreerobotics/unitree_rl_lab?tab=readme-ov-file#deploy)
+#### Setup for deploy (Sim2Sim and Sim2Real)
