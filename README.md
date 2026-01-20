@@ -7,6 +7,7 @@ G1-EDU from RL to Sim-to-real
 * Isaac Sim v5.1.0
 * Isaac Lab: main (commit 3d42bff37a8ba3d0f5d6a7d687b5668e3a397ed8, 2026-01-16, after v2.3.1)
 * unitree_rl_lab: main (commit 4960b84732b0c2ec593dccbfe963fda1bcd7b1e3, 2025-11-19)
+* unitree_ros: master (commit 29cc27f7578e010165042e1fe45cc18f3a4dd2ca, 2026-01-04)
 
 ## What I have done
 ### Follow [Isaac Lab/Installation using Isaac Sim Pre-built Binaries](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html)
@@ -126,7 +127,62 @@ G1-EDU from RL to Sim-to-real
                 activate-global-python-argcomplete --user
                 ```
 3. Download unitree robot description files (Using URDF Files)
-    ```shell
-    cd ~/project/Humanoid
-    git clone https://github.com/unitreerobotics/unitree_ros.git
-    ```
+    * Download urdf
+        ```shell
+        cd ~/project/Humanoid
+        git clone https://github.com/unitreerobotics/unitree_ros.git
+        rm -rf unitree_ros/.git
+        ```
+    * Config `UNITREE_ROS_DIR` in `unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/assets/robots/unitree.py`    
+        from
+        ```python
+        UNITREE_ROS_DIR = "path/to/unitree_ros"  # Replace with the actual path to your unitree_ros package
+        ...
+            # spawn=UnitreeUrdfFileCfg(
+            #     asset_path=f"{UNITREE_ROS_DIR}/robots/go2_description/urdf/go2_description.urdf",
+            # ),
+            spawn=UnitreeUsdFileCfg(
+                usd_path=f"{UNITREE_MODEL_DIR}/Go2/usd/go2.usd",
+            ),
+        ...
+        ```
+        to
+        ```python
+        UNITREE_ROS_DIR = "/home/hojun/project/Humanoid/unitree_ros"  # Replace with the actual path to your unitree_ros package
+        ...
+            spawn=UnitreeUrdfFileCfg(
+                asset_path=f"{UNITREE_ROS_DIR}/robots/go2_description/urdf/go2_description.urdf",
+            ),
+            # spawn=UnitreeUsdFileCfg(
+            #     usd_path=f"{UNITREE_MODEL_DIR}/Go2/usd/go2.usd",
+            # ),
+        ...
+        ```
+        Every `UnitreeUrdfFileCfg` should be changed
+   * Verify that the environments are correctly installed by:
+        ```shell
+        cd unitree_rl_lab
+        # Listing the available tasks
+        ./unitree_rl_lab.sh -l # This is a faster version than isaaclab
+        # Running a task (Same)
+        ./unitree_rl_lab.sh -t --task Unitree-G1-29dof-Velocity
+        python scripts/rsl_rl/train.py --headless --task Unitree-G1-29dof-Velocity
+        # Inference with a trained agent (Same)
+        ./unitree_rl_lab.sh -p --task Unitree-G1-29dof-Velocity
+        python scripts/rsl_rl/play.py --task Unitree-G1-29dof-Velocity
+        ```
+        * Troubleshooting
+            ```shell
+            Traceback (most recent call last):
+              File "/home/hojun/project/Humanoid/unitree_rl_lab/scripts/rsl_rl/play.py", line 59, in <module>
+                from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+            ModuleNotFoundError: No module named 'isaaclab.utils.pretrained_checkpoint'
+            ```
+            Change line 59 in `unitree_rl_lab/scripts/rsl_rl/play.py` from
+            ```python
+            from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+            ```
+            to
+            ```python
+            from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+            ```
