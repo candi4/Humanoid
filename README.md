@@ -1,9 +1,12 @@
 # Humanoid
 G1-EDU from RL to Sim-to-real
 
-## PC Specification
+## Specification
 * Ubuntu24.04
-* 
+* Python3.11
+* Isaac Sim v5.1.0
+* Isaac Lab: main (commit 3d42bff37a8ba3d0f5d6a7d687b5668e3a397ed8, 2026-01-16, after v2.3.1)
+* unitree_rl_lab: main (commit 4960b84732b0c2ec593dccbfe963fda1bcd7b1e3, 2025-11-19)
 
 ## What I have done
 ### Follow [Isaac Lab/Installation using Isaac Sim Pre-built Binaries](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html)
@@ -55,12 +58,16 @@ G1-EDU from RL to Sim-to-real
     ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Ant-v0 --headless
     # train a robot dog to walk
     ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-Anymal-C-v0 --headless
+    # train humanoid G1
+    ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-G1-v0 --headless
+    ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-G1-v0 --headless
     ```
 * Play (Refer to [Isaac Lab/Reinforcement Learning Scripts](https://isaac-sim.github.io/IsaacLab/main/source/overview/reinforcement-learning/rl_existing_scripts.html))
     ```shell
     # run script for playing with 32 environments
     ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task Isaac-Velocity-Rough-Anymal-C-v0 --num_envs 32 --load_run logs/rsl_rl/anymal_c_rough/2026-01-16_15-01-34 --checkpoint logs/rsl_rl/anymal_c_rough/2026-01-16_15-01-34/model_1499.pt
     ```
+* For more examples, refer to [Isaac Lab/Available Environments](https://isaac-sim.github.io/IsaacLab/main/source/overview/environments.html)
 
 ### Follow [Unitree RL Lab/Installation](https://github.com/unitreerobotics/unitree_rl_lab?tab=readme-ov-file#installation)
 #### Install the Unitree RL IsaacLab standalone environments
@@ -118,3 +125,8 @@ G1-EDU from RL to Sim-to-real
                 ```
                 activate-global-python-argcomplete --user
                 ```
+3. Download unitree robot description files (Using URDF Files)
+    ```shell
+    cd ~/project/Humanoid
+    git clone https://github.com/unitreerobotics/unitree_ros.git
+    ```
