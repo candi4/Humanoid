@@ -201,3 +201,9 @@ G1-EDU from RL to Sim-to-real
 
 ### Follow [Unitree RL Lab/Deploy](https://github.com/unitreerobotics/unitree_rl_lab?tab=readme-ov-file#deploy)
 #### Setup for deploy (Sim2Sim and Sim2Real)
+```shell
+sudo apt install -y libyaml-cpp-dev libboost-all-dev libeigen3-dev libspdlog-dev libfmt-dev
+cd ~/project/Humanoid
+git clone https://github.com/unitreerobotics/unitree_sdk2.git
+rm -rf unitree_sdk2/.git
+```
