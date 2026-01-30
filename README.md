@@ -8,6 +8,9 @@ G1-EDU from RL to Sim-to-real
 * Isaac Lab: main (commit 3d42bff37a8ba3d0f5d6a7d687b5668e3a397ed8, 2026-01-16, after v2.3.1)
 * unitree_rl_lab: main (commit 4960b84732b0c2ec593dccbfe963fda1bcd7b1e3, 2025-11-19)
 * unitree_ros: master (commit 29cc27f7578e010165042e1fe45cc18f3a4dd2ca, 2026-01-04)
+* unitree_sdk2: main (commit f29ee9f234851e9e79f75102c0f9e83008d8fdd1, 2026-01-05, after v2.0.2)
+* unitree_mujoco: main (commit 1a37b051a10be723405b7ed6dc839361af036d88, 2025-11-07)
+* mujoco: 3.4.0 (mujoco-3.4.0-linux-x86_64.tar.gz)
 
 ## What I have done
 ### Follow [Isaac Lab/Installation using Isaac Sim Pre-built Binaries](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html)
@@ -206,4 +209,209 @@ sudo apt install -y libyaml-cpp-dev libboost-all-dev libeigen3-dev libspdlog-dev
 cd ~/project/Humanoid
 git clone https://github.com/unitreerobotics/unitree_sdk2.git
 rm -rf unitree_sdk2/.git
+cd unitree_sdk2
+mkdir build && cd build
+cmake .. -DBUILD_EXAMPLES=OFF # Install on the /usr/local directory
+sudo make install
+cd ../../unitree_rl_lab/deploy/robots/g1_29dof
+mkdir build && cd build
+cmake .. && make
 ```
+#### Sim2Sim
+##### Install unitree_mujoco
+1. Dependencies
+    ```shell
+    sudo apt install libyaml-cpp-dev libspdlog-dev libboost-all-dev libglfw3-dev
+    ```
+
+2. Clone unitree_mujoco
+    ```shell
+    cd ~/project/Humanoid
+    git clone https://github.com/unitreerobotics/unitree_mujoco.git
+    rm -rf unitree_mujoco/.git
+    ```
+
+3. Download [mujoco release](https://github.com/google-deepmind/mujoco/releases)
+and extract it to `~/.mujoco`
+    ```shell
+    mkdir ~/.mujoco
+    tar -xzf ~/Downloads/mujoco-*.tar.gz -C ~/.mujoco
+    cd unitree_mujoco/simulate/
+    ln -s ~/.mujoco/mujoco-3.4.0 mujoco # Creates a symbolic link
+    ```
+
+4. Compile unitree_mujoco
+    ```shell
+    cd ~/project/Humanoid/unitree_mujoco/simulate
+    mkdir build && cd build
+    cmake ..
+    make -j4
+    ```
+    * Troubleshoot
+        ```shell
+        (env_isaaclab) hojun@hojun-Z890-AORUS-ELITE-WIFI7:~/project/Humanoid/unitree_mujoco/simulate/build$ cmake ..
+        -- The C compiler identification is GNU 13.3.0
+        -- The CXX compiler identification is GNU 13.3.0
+        -- Detecting C compiler ABI info
+        -- Detecting C compiler ABI info - done
+        -- Check for working C compiler: /usr/bin/cc - skipped
+        -- Detecting C compile features
+        -- Detecting C compile features - done
+        -- Detecting CXX compiler ABI info
+        -- Detecting CXX compiler ABI info - done
+        -- Check for working CXX compiler: /usr/bin/c++ - skipped
+        -- Detecting CXX compile features
+        -- Detecting CXX compile features - done
+        Release mode
+        -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+        -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+        -- Found Threads: TRUE  
+        -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: program_options 
+        -- Configuring done (0.2s)
+        -- Generating done (0.0s)
+        -- Build files have been written to: /home/hojun/project/Humanoid/unitree_mujoco/simulate/build
+        (env_isaaclab) hojun@hojun-Z890-AORUS-ELITE-WIFI7:~/project/Humanoid/unitree_mujoco/simulate/build$ make -j4
+        [  9%] Building CXX object CMakeFiles/jstest.dir/src/joystick/jstest.cc.o
+        [ 18%] Building CXX object CMakeFiles/unitree_mujoco.dir/mujoco/simulate/glfw_adapter.cc.o
+        [ 27%] Building CXX object CMakeFiles/unitree_mujoco.dir/mujoco/simulate/glfw_dispatch.cc.o
+        [ 36%] Building CXX object CMakeFiles/jstest.dir/src/joystick/joystick.cc.o
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:15:5: error: ‘uint8_t’ does not name a type
+           15 |     uint8_t R1 : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:5:1: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+            4 | #include "joystick.h"
+          +++ |+#include <cstdint>
+            5 | 
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:16:5: error: ‘uint8_t’ does not name a type
+           16 |     uint8_t L1 : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:16:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:17:5: error: ‘uint8_t’ does not name a type
+           17 |     uint8_t start : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:17:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:18:5: error: ‘uint8_t’ does not name a type
+           18 |     uint8_t select : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:18:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:19:5: error: ‘uint8_t’ does not name a type
+           19 |     uint8_t R2 : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:19:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:20:5: error: ‘uint8_t’ does not name a type
+           20 |     uint8_t L2 : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:20:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:21:5: error: ‘uint8_t’ does not name a type
+           21 |     uint8_t F1 : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:21:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:22:5: error: ‘uint8_t’ does not name a type
+           22 |     uint8_t F2 : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:22:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:23:5: error: ‘uint8_t’ does not name a type
+           23 |     uint8_t A : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:23:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:24:5: error: ‘uint8_t’ does not name a type
+           24 |     uint8_t B : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:24:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:25:5: error: ‘uint8_t’ does not name a type
+           25 |     uint8_t X : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:25:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:26:5: error: ‘uint8_t’ does not name a type
+           26 |     uint8_t Y : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:26:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:27:5: error: ‘uint8_t’ does not name a type
+           27 |     uint8_t up : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:27:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:28:5: error: ‘uint8_t’ does not name a type
+           28 |     uint8_t right : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:28:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:29:5: error: ‘uint8_t’ does not name a type
+           29 |     uint8_t down : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:29:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:30:5: error: ‘uint8_t’ does not name a type
+           30 |     uint8_t left : 1;
+              |     ^~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:30:5: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:32:3: error: ‘uint16_t’ does not name a type
+           32 |   uint16_t value;
+              |   ^~~~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:32:3: note: ‘uint16_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc: In function ‘int main(int, char**)’:
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:78:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘R1’
+           78 |     unitree_key.components.R1 = joystick.button_[ButtonId["RB"]];
+              |                            ^~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:79:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘L1’
+           79 |     unitree_key.components.L1 = joystick.button_[ButtonId["LB"]];
+              |                            ^~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:80:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘start’
+           80 |     unitree_key.components.start = joystick.button_[ButtonId["START"]];
+              |                            ^~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:81:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘select’
+           81 |     unitree_key.components.select = joystick.button_[ButtonId["SELECT"]];
+              |                            ^~~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:82:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘R2’
+           82 |     unitree_key.components.R2 = (joystick.axis_[AxisId["RT"]] > 0);
+              |                            ^~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:83:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘L2’
+           83 |     unitree_key.components.L2 = (joystick.axis_[AxisId["LT"]] > 0);
+              |                            ^~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:84:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘F1’
+           84 |     unitree_key.components.F1 = 0;
+              |                            ^~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:85:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘F2’
+           85 |     unitree_key.components.F2 = 0;
+              |                            ^~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:86:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘A’
+           86 |     unitree_key.components.A = joystick.button_[ButtonId["A"]];
+              |                            ^
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:87:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘B’
+           87 |     unitree_key.components.B = joystick.button_[ButtonId["B"]];
+              |                            ^
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:88:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘X’
+           88 |     unitree_key.components.X = joystick.button_[ButtonId["X"]];
+              |                            ^
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:89:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘Y’
+           89 |     unitree_key.components.Y = joystick.button_[ButtonId["Y"]];
+              |                            ^
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:90:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘up’
+           90 |     unitree_key.components.up = (joystick.axis_[AxisId["DY"]] < 0);
+              |                            ^~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:91:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘right’
+           91 |     unitree_key.components.right = (joystick.axis_[AxisId["DX"]] > 0);
+              |                            ^~~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:92:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘down’
+           92 |     unitree_key.components.down = (joystick.axis_[AxisId["DY"]] > 0);
+              |                            ^~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:93:28: error: ‘struct xKeySwitchUnion::<unnamed>’ has no member named ‘left’
+           93 |     unitree_key.components.left = (joystick.axis_[AxisId["DX"]] < 0);
+              |                            ^~~~
+        /home/hojun/project/Humanoid/unitree_mujoco/simulate/src/joystick/jstest.cc:95:25: error: ‘union xKeySwitchUnion’ has no member named ‘value’
+           95 |     cout << unitree_key.value << endl;
+              |                         ^~~~~
+        make[2]: *** [CMakeFiles/jstest.dir/build.make:76: CMakeFiles/jstest.dir/src/joystick/jstest.cc.o] Error 1
+        make[2]: *** Waiting for unfinished jobs....
+        [ 45%] Building CXX object CMakeFiles/unitree_mujoco.dir/mujoco/simulate/simulate.cc.o
+        [ 54%] Building CXX object CMakeFiles/unitree_mujoco.dir/mujoco/simulate/platform_ui_adapter.cc.o
+        make[1]: *** [CMakeFiles/Makefile2:111: CMakeFiles/jstest.dir/all] Error 2
+        make[1]: *** Waiting for unfinished jobs....
+        [ 63%] Building CXX object CMakeFiles/unitree_mujoco.dir/src/joystick/joystick.cc.o
+        [ 72%] Building CXX object CMakeFiles/unitree_mujoco.dir/src/lodepng/lodepng.cpp.o
+        [ 81%] Building CXX object CMakeFiles/unitree_mujoco.dir/src/main.cc.o
+        [ 90%] Linking CXX executable unitree_mujoco
+        [ 90%] Built target unitree_mujoco
+        make: *** [Makefile:91: all] Error 2
+        ```
+        Insert this line at the top of `unitree_mujoco/simulate/src/joystick/jstest.cc`
+        ```c
+        #include <stdint.h>
+        ```
