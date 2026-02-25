@@ -415,3 +415,35 @@ and extract it to `~/.mujoco`
         ```c
         #include <stdint.h>
         ```
+5. Test installation
+    ```shell
+    cd ~/project/Humanoid/unitree_mujoco/simulate/build/
+    ./unitree_mujoco -r go2 -s scene_terrain.xml
+    ```
+    You see Go2 robot in mujuco simulator.
+    * Troubleshooting
+        ```shell
+        (env_isaaclab) hojun@hojun-Z890-AORUS-ELITE-WIFI7:~/project/Humanoid/unitree_mujoco/simulate/build$ ./unitree_mujoco -r go2 -s scene_terrain.xml
+        MuJoCo version 3.4.0
+        ERROR: could not create window
+        ```
+        ```shell
+        sudo apt update
+        sudo apt install -y mesa-utils
+        glxinfo | grep -E "OpenGL vendor|OpenGL renderer|OpenGL version" | head
+        ```
+    At `unitree_mujoco/simulate/config.yaml`, Set
+    `robot` to `g1`, 
+    `domain_id` to 0, 
+    `enable_elastic_band` to 1, and
+    `use_joystick` to 1.
+    After connecting xbox joystick, run:
+    ```shell
+    cd ~/project/Humanoid/unitree_mujoco/simulate/build
+    ./unitree_mujoco
+    ```
+    In other terminal, run:
+    ```shell
+    cd ~/project/Humanoid/unitree_rl_lab/deploy/robots/g1_29dof/build
+    ./g1_ctrl --network lo
+    ```
